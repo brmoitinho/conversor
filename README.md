@@ -119,21 +119,11 @@ tsconfig.json
 README.md
 ```
 
-## Publicação no GitHub
+## Publicação 
 
-1. Crie um repositório vazio no GitHub, por exemplo `conversor-moedas`.
-2. Na pasta do projeto, execute:
+Para publicar gratuitamente, você pode usar Vercel, Netlify ou GitHub Pages. 
 
-```bash
-git init
-git add .
-git commit -m "feat: adiciona conversor de moedas BRL USD EUR"
-git branch -M main
-git remote add origin https://github.com/SEU_USUARIO/conversor-moedas.git
-git push -u origin main
-```
-
-3. Para publicar gratuitamente, você pode usar Vercel, Netlify ou GitHub Pages. Para Vercel/Netlify, o comando de build é `pnpm build` e a pasta publicada é `dist/public`.
+Para Vercel/Netlify, o comando de build é `pnpm build` e a pasta publicada é `dist/public`.
 
 ## Observações
 
