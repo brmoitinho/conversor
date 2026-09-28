@@ -25,8 +25,8 @@ import {
   type CurrencyCode,
   type RateMap,
 } from "@/lib/currency";
+import { fetchLiveRates } from "@/lib/rates-api";
 
-const API_URL = "https://api.fxratesapi.com/latest?base=BRL";
 const HISTORY_KEY = "conversor-moedas-history";
 
 type Conversion = {
@@ -73,19 +73,9 @@ export default function Home() {
     setSourceStatus("loading");
 
     try {
-      const response = await fetch(API_URL, { headers: { Accept: "application/json" } });
-      if (!response.ok) throw new Error("Falha ao consultar a API");
-      const data = (await response.json()) as { rates?: Record<string, number>; date?: string };
-      const nextRates: RateMap = {
-        BRL: 1,
-        USD: Number(data.rates?.USD),
-        EUR: Number(data.rates?.EUR),
-      };
-      if (!Number.isFinite(nextRates.USD) || !Number.isFinite(nextRates.EUR)) {
-        throw new Error("Resposta incompleta");
-      }
-      setRates(nextRates);
-      setLastUpdated(data.date ?? new Date().toISOString());
+      const liveRates = await fetchLiveRates();
+      setRates(liveRates.rates);
+      setLastUpdated(liveRates.date);
       setSourceStatus("live");
       setError("");
     } catch {
@@ -215,7 +205,7 @@ export default function Home() {
               <label htmlFor="result">Você recebe</label>
               <div className="result-field" id="result" aria-live="polite">
                 <span className="result-value">{convertedAmount === null ? "—" : formatCurrency(convertedAmount, to)}</span>
-                <span className="result-code">{to}</span>
+                <CurrencySelect value={to} onChange={setTo} />
               </div>
               <span className="field-helper">Valor estimado em {toMeta.name.toLowerCase()}</span>
             </div>
